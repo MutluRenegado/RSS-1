@@ -48,34 +48,33 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feedparser/2.3.0/feedparser.min.js"></script>
     <script>
-        const rssFeeds = [
-            "https://example.com/rss/feed1.xml",
-            "https://example.com/rss/feed2.xml"
-            // Add more RSS feed URLs here
-        ];
-
         const ul = document.getElementById("rss-feeds");
 
-        rssFeeds.forEach(feedUrl => {
-            const parser = new FeedParser();
+        const sources = [
+            "https://rssgenerator.mooo.com/feeds/?p=aaHR0cHM6Ly9uZXdzLmdvb2dsZS5jb20vaG9tZT9obD1lbi1HQiZnbD1HQiZjZWlkPUdCOmVu/",
+            "https://www.nytimes.com/rss",
+            "https://www.washingtonpost.com/discussions/2018/10/12/washington-post-rss-feeds/",
+            "https://rssgenerator.mooo.com/feeds/?p=aaHR0cHM6Ly93d3cuY2hpbmFkYWlseS5jb20uY24v",
+            "https://www.sabah.com.tr/rss-bilgi/"
+        ];
 
-            parser.parseUrl(feedUrl, (err, feed) => {
-                if (err) {
-                    console.error("Error parsing RSS feed", err);
-                    return;
-                }
-
-                feed.items.forEach(item => {
-                    const li = document.createElement("li");
-                    const a = document.createElement("a");
-                    a.textContent = item.title;
-                    a.href = item.link;
-                    li.appendChild(a);
-                    ul.appendChild(li);
+        sources.forEach(feedUrl => {
+            fetch(feedUrl)
+                .then(response => response.json())
+                .then(data => {
+                    data.items.forEach(item => {
+                        const li = document.createElement("li");
+                        const a = document.createElement("a");
+                        a.textContent = item.title;
+                        a.href = item.link;
+                        li.appendChild(a);
+                        ul.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching RSS feed", error);
                 });
-            });
         });
     </script>
 </body>
 </html>
-
